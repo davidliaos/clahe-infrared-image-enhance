@@ -20,7 +20,6 @@ import matplotlib.pyplot as plt
 from skimage import io
 from skimage import color
 
-
 def image_read(im_path):
     """
     Reads image and converts it to grayscale if needed.
@@ -32,10 +31,10 @@ def image_read(im_path):
         if len(image.shape) == 2:
             return image
         elif len(image.shape) == 3:
-            gray_img = color.rgb2gray(image)
+            gray_img = (color.rgb2gray(image) * 255).astype(np.uint8)
             return image, gray_img
         elif len(image.shape) == 4:
-            gray_img = color.rgb2gray(color.rgba2rgb(image))
+            gray_img = (color.rgb2gray(color.rgba2rgb(image)) * 255).astype(np.uint8)
             return image, gray_img
 
     except ValueError:
@@ -247,7 +246,7 @@ def clahe(img, clipLimit, nrBins=128, nrX=0, nrY=0):
 
 if __name__ == '__main__':
     clip_size = 8
-    gray_image = image_read('lena.png')
+    _, gray_image = image_read('lake_512x512.png')
     clahe_image = clahe(gray_image, clip_size, 256, 4, 4)
 
     show_results(gray_image, clahe_image, clip_size)
